@@ -405,7 +405,7 @@ new file mode 100644
 index 0000000..fcb1030
 --- /dev/null
 +++ b/mt7915/npu.c
-@@ -0,0 +1,290 @@
+@@ -0,0 +1,293 @@
 +// SPDX-License-Identifier: BSD-3-Clause-Clear
 +/*
 + * Copyright (C) 2026 PonWrt / Airoha EN7581 MT7916 NPU RX offload
@@ -414,6 +414,7 @@ index 0000000..fcb1030
 +#include <linux/soc/airoha/airoha_offload.h>
 +
 +#include "mt7915.h"
++#include "../dma.h"
 +
 +#define MT7916_NPU_DRIVER_MODEL		2
 +
@@ -545,7 +546,8 @@ index 0000000..fcb1030
 +	struct airoha_npu *npu;
 +	int i, err;
 +
-+	npu = rcu_dereference_protected(dev->mt76.mmio.npu, &dev->mt76.mutex);
++	npu = rcu_dereference_protected(dev->mt76.mmio.npu,
++					lockdep_is_held(&dev->mt76.mutex));
 +	if (!npu)
 +		return 0;
 +
@@ -611,7 +613,8 @@ index 0000000..fcb1030
 +{
 +	struct airoha_npu *npu;
 +
-+	npu = rcu_dereference_protected(dev->mt76.mmio.npu, &dev->mt76.mutex);
++	npu = rcu_dereference_protected(dev->mt76.mmio.npu,
++					lockdep_is_held(&dev->mt76.mutex));
 +	if (!npu)
 +		return 0;
 +
